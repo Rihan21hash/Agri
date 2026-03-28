@@ -6,7 +6,7 @@ import Sidebar from "../components/Sidebar";
 
 function MainLayout() {
   return (
-    <div className="flex min-h-screen flex-col bg-slate-50">
+    <div className="flex min-h-screen flex-col bg-earth-50">
       <Navbar />
       <div className="mx-auto flex w-full max-w-[1600px] flex-1 min-h-0">
         <Sidebar />

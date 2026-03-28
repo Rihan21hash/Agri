@@ -1,8 +1,8 @@
 /**
- * Sort listings by soonest expiry first, then by newest createdAt.
+ * Sort items by soonest expiry first, then by newest createdAt.
  */
-export function sortListingsByUrgency(listings) {
-  return [...listings].sort((a, b) => {
+export function sortItemsByUrgency(items) {
+  return [...items].sort((a, b) => {
     const expiryA = a.expiresAt ?? Number.MAX_SAFE_INTEGER;
     const expiryB = b.expiresAt ?? Number.MAX_SAFE_INTEGER;
 

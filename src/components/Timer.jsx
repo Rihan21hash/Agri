@@ -18,7 +18,7 @@ function Timer({ expiresAt }) {
   }, [expiresAt]);
 
   if (!expiresAt) {
-    return <span>Expired</span>;
+    return <span className="text-earth-500">—</span>;
   }
 
   return <span>{formatTimeRemaining(timeLeftMs)}</span>;

@@ -7,7 +7,7 @@
     @apply scroll-smooth antialiased;
   }
   body {
-    @apply bg-slate-50 text-slate-900 font-sans;
+    @apply bg-earth-50 text-earth-950 font-sans;
   }
 }
 

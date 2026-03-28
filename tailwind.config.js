@@ -30,12 +30,29 @@ module.exports = {
           800: "#065f46",
           900: "#064e3b",
         },
+        earth: {
+          50: "#faf8f5",
+          100: "#f0ebe3",
+          200: "#ddd2c2",
+          300: "#c4b49a",
+          400: "#a89472",
+          500: "#8f7356",
+          600: "#735946",
+          700: "#5d4639",
+          800: "#4a3728",
+          900: "#3d2e24",
+          950: "#231a14",
+        },
+        cream: {
+          50: "#fdfcfa",
+          100: "#f7f3eb",
+        },
       },
       boxShadow: {
         soft:
-          "0 2px 8px -2px rgba(15, 23, 42, 0.06), 0 4px 20px -4px rgba(15, 23, 42, 0.08)",
+          "0 2px 8px -2px rgba(61, 46, 36, 0.06), 0 4px 20px -4px rgba(61, 46, 36, 0.08)",
         card:
-          "0 1px 0 rgba(15,23,42,0.04), 0 4px 24px -6px rgba(15, 23, 42, 0.1)",
+          "0 1px 0 rgba(61,46,36,0.04), 0 4px 24px -6px rgba(61, 46, 36, 0.1)",
       },
       animation: {
         "fade-up": "fadeUp 0.5s ease-out forwards",

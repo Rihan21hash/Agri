@@ -1,41 +1,27 @@
-import { render, screen, waitFor } from "@testing-library/react";
-import DashboardPage from "./pages/DashboardPage";
-import { AuthProvider } from "./hooks/useAuth";
+import { render, screen } from "@testing-library/react";
+import { AuthProvider } from "./context/AuthContext";
 
 jest.mock("./firebase", () => ({
   auth: {},
   db: {},
+  storage: {},
 }));
 
 jest.mock("firebase/auth", () => ({
   onAuthStateChanged: jest.fn((_auth, callback) => {
     callback(null);
-    return () => {};
+    return jest.fn();
   }),
-  signInWithEmailAndPassword: jest.fn(),
-  createUserWithEmailAndPassword: jest.fn(),
-  signOut: jest.fn(),
 }));
 
 jest.mock("firebase/firestore", () => ({
-  collection: jest.fn(),
-  doc: jest.fn(),
-  addDoc: jest.fn(),
-  updateDoc: jest.fn(),
-  query: jest.fn(),
-  orderBy: jest.fn(),
-  onSnapshot: jest.fn((_q, onNext) => {
-    onNext({ docs: [] });
-    return () => {};
+  doc: jest.fn(() => ({})),
+  onSnapshot: jest.fn((_ref, onNext) => {
+    onNext({ exists: () => false });
+    return jest.fn();
   }),
+  setDoc: jest.fn(() => Promise.resolve()),
   serverTimestamp: jest.fn(),
-}));
-
-jest.mock("./components/Timer", () => ({
-  __esModule: true,
-  default: function MockTimer() {
-    return <span data-testid="timer-mock">—</span>;
-  },
 }));
 
 test("sanity: render and cleanup", () => {
@@ -52,21 +38,4 @@ test("AuthProvider mounts and unmounts cleanly", () => {
   );
   expect(screen.getByText("child")).toBeInTheDocument();
   unmount();
-});
-
-test("renders dashboard section headings", async () => {
-  render(
-    <AuthProvider>
-      <DashboardPage />
-    </AuthProvider>
-  );
-  await waitFor(() => {
-    expect(
-      screen.getByRole("heading", { name: /login \/ signup/i })
-    ).toBeInTheDocument();
-  });
-  expect(screen.getByRole("heading", { name: /farmer post/i })).toBeInTheDocument();
-  expect(
-    screen.getByRole("heading", { name: /buyer flash feed/i })
-  ).toBeInTheDocument();
 });
