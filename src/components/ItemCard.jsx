@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import Timer from "./Timer";
+import { Clock, MapPin, DollarSign, Store } from "lucide-react";
 
 const ONE_HOUR_MS = 60 * 60 * 1000;
 
@@ -11,107 +12,124 @@ function ItemCard({ item, onMarkSold, isAuthenticated, compact }) {
     !isSold && !isExpired && expiresAt && expiresAt - Date.now() <= ONE_HOUR_MS;
 
   let statusLabel = "Available";
+  let badgeStyles = "bg-agri-green-100 text-agri-green-800 border-agri-green-200";
+
   if (isSold) {
     statusLabel = "Sold";
+    badgeStyles = "bg-soil-dark-100 text-soil-dark-700 border-soil-dark-200";
   } else if (isExpired && expiresAt) {
     statusLabel = "Expired";
+    badgeStyles = "bg-red-100 text-red-800 border-red-200";
+  } else if (urgent) {
+    statusLabel = "Expiring Soon";
+    badgeStyles = "bg-harvest-gold-100 text-harvest-gold-800 border-harvest-gold-300 animate-pulse";
   }
 
   const canMarkSold = isAuthenticated && !isSold && !isExpired;
-  const statusKey = statusLabel.toLowerCase();
-
-  const statusStyles = {
-    available: "border-accent-200 bg-accent-50 text-accent-900",
-    expired: "border-red-200 bg-red-50 text-red-800",
-    sold: "border-earth-200 bg-earth-100 text-earth-700",
-  };
 
   const ringClass = urgent
-    ? "ring-2 ring-amber-400/60 shadow-md"
-    : "shadow-sm";
+    ? "ring-2 ring-harvest-gold-500 shadow-floating"
+    : "shadow-card hover:shadow-card-hover border border-soil-dark-100";
 
   const imageSrc =
     item.imageUrl?.trim() ||
-    "https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=800&q=60";
+    "/images/placeholder_crop_1775016486419.png";
 
   return (
     <article
-      className={`group flex flex-col overflow-hidden rounded-2xl border border-earth-200/90 bg-white transition duration-300 hover:-translate-y-0.5 hover:border-earth-300 hover:shadow-card ${ringClass} ${
-        isSold ? "opacity-90" : ""
+      className={`group flex flex-col overflow-hidden rounded-3xl bg-white transition-all duration-300 relative ${ringClass} ${
+        isSold ? "opacity-75 grayscale-[0.3]" : ""
       }`}
     >
-      <Link to={`/item/${item.id}`} className="relative block aspect-[4/3] overflow-hidden bg-earth-100">
+      <Link to={`/item/${item.id}`} className="relative block aspect-[4/3] overflow-hidden bg-cream-50">
         <img
           src={imageSrc}
-          alt=""
-          className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
+          alt={item.title}
+          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
           loading="lazy"
         />
-        <span
-          className={`absolute right-3 top-3 rounded-full border px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wide ${statusStyles[statusKey] ?? statusStyles.available}`}
-        >
-          {statusLabel}
-        </span>
+        {/* Gradient overlay for text readability at the bottom of the image if ever we wanted text there */}
+        <div className="absolute inset-0 bg-gradient-to-t from-soil-dark-950/60 via-transparent" />
+        
+        <div className="absolute top-4 right-4 flex flex-col gap-2 items-end">
+          <span
+            className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-wider backdrop-blur-md bg-opacity-90 ${badgeStyles}`}
+          >
+            {statusLabel}
+          </span>
+        </div>
+
+        <div className="absolute bottom-4 left-4 right-4 text-white">
+           <h3 className="font-display text-2xl font-bold leading-tight drop-shadow-md line-clamp-1">
+             {item.title}
+           </h3>
+           <p className="flex items-center gap-1 text-sm font-medium opacity-90 mt-1">
+             <MapPin className="h-4 w-4" /> Local Harvest
+           </p>
+        </div>
       </Link>
 
       <div className="flex flex-1 flex-col p-5">
-        <div className="mb-2 flex items-start justify-between gap-2">
-          <Link to={`/item/${item.id}`}>
-            <h3 className="font-display text-lg font-semibold leading-tight text-earth-950 hover:text-accent-800">
-              {item.title}
-            </h3>
-          </Link>
-        </div>
-
         <p
-          className={`${compact ? "line-clamp-2" : "line-clamp-3"} text-sm leading-relaxed text-earth-600`}
+          className={`${compact ? "line-clamp-2" : "line-clamp-3"} text-sm leading-relaxed text-soil-dark-600 mb-4`}
         >
           {item.description}
         </p>
 
-        <dl className="mt-4 space-y-2 text-sm text-earth-600">
-          <div className="flex justify-between gap-2">
-            <dt className="text-earth-500">Price</dt>
-            <dd className="font-semibold text-earth-950">
-              {typeof item.price === "number" ? item.price.toFixed(2) : item.price}
-            </dd>
+        <div className="mt-auto flex flex-col gap-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center text-agri-green-700 font-display text-2xl font-bold">
+               <DollarSign className="h-6 w-6 -mr-1" />
+               {typeof item.price === "number" ? item.price.toFixed(2) : item.price}
+            </div>
+            
+            {expiresAt ? (
+              <div className={`flex flex-col items-end ${urgent ? 'text-harvest-gold-600' : 'text-soil-dark-500'}`}>
+                <span className="text-xs font-bold uppercase tracking-wider opacity-80">Time left</span>
+                <span className="flex items-center gap-1 font-mono text-base font-bold tabular-nums">
+                  <Clock className="h-4 w-4" />
+                  <Timer expiresAt={expiresAt} />
+                </span>
+              </div>
+            ) : (
+              <div className="flex flex-col items-end text-soil-dark-500">
+                <span className="text-xs font-bold uppercase tracking-wider">Listing</span>
+                <span className="text-sm font-bold">Always Open</span>
+              </div>
+            )}
           </div>
-        </dl>
 
-        {expiresAt ? (
-          <div className="mt-4 flex items-center justify-between rounded-xl bg-earth-50 px-3 py-2 text-sm">
-            <span className="font-medium text-earth-500">Time left</span>
-            <span className="font-mono text-sm tabular-nums font-semibold text-earth-950">
-              <Timer expiresAt={expiresAt} />
-            </span>
+          <div className="flex flex-wrap gap-2 pt-2 border-t border-soil-dark-100">
+            <Link
+              to={`/item/${item.id}`}
+              className="inline-flex flex-1 min-w-[8rem] items-center justify-center gap-2 rounded-xl bg-soil-dark-50 px-4 py-3 text-sm font-bold text-soil-dark-700 transition-colors hover:bg-soil-dark-100"
+            >
+               View Details
+            </Link>
+            <button
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                onMarkSold?.(item.id);
+              }}
+              disabled={!canMarkSold}
+              className={`inline-flex flex-1 min-w-[8rem] items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-bold text-white shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 ${
+                !isAuthenticated
+                  ? 'bg-soil-dark-200 text-soil-dark-500 cursor-not-allowed'
+                  : isSold || isExpired
+                    ? 'bg-soil-dark-200 text-soil-dark-500 cursor-not-allowed'
+                    : 'bg-agri-green-600 hover:bg-agri-green-700 shadow-floating hover:-translate-y-0.5 focus:ring-agri-green-500'
+              }`}
+            >
+              {!isAuthenticated
+                ? "Login to buy"
+                : isSold
+                  ? "Sold Out"
+                  : isExpired
+                    ? "Expired"
+                    : "I'm Interested"}
+            </button>
           </div>
-        ) : (
-          <div className="mt-4 rounded-xl bg-earth-50 px-3 py-2 text-sm text-earth-500">
-            Open listing — no fixed deadline
-          </div>
-        )}
-
-        <div className="mt-4 flex flex-wrap gap-2">
-          <Link
-            to={`/item/${item.id}`}
-            className="inline-flex flex-1 min-w-[8rem] items-center justify-center rounded-xl border border-earth-200 bg-white px-4 py-2.5 text-sm font-semibold text-earth-800 transition hover:border-accent-300 hover:bg-accent-50"
-          >
-            Details
-          </Link>
-          <button
-            type="button"
-            onClick={() => onMarkSold?.(item.id)}
-            disabled={!canMarkSold}
-            className="inline-flex flex-1 min-w-[8rem] items-center justify-center rounded-xl bg-earth-900 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-earth-800 focus:outline-none focus:ring-2 focus:ring-earth-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:bg-earth-200 disabled:text-earth-500"
-          >
-            {!isAuthenticated
-              ? "Login to respond"
-              : isSold
-                ? "Sold"
-                : isExpired
-                  ? "Expired"
-                  : "Mark interested"}
-          </button>
         </div>
       </div>
     </article>

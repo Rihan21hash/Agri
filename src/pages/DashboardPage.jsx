@@ -5,11 +5,12 @@ import { db } from "../firebase";
 import { getItems, markAsSold } from "../services/itemsService";
 import { formatFirebaseError } from "../utils/firebaseErrors";
 import { sortItemsByUrgency } from "../utils/sortItems";
+import { Leaf, AlertCircle, Loader2 } from "lucide-react";
 
 const FILTERS = [
-  { id: "all", label: "All listings" },
-  { id: "available", label: "Available" },
-  { id: "sold", label: "Sold" },
+  { id: "all", label: "All Harvests" },
+  { id: "available", label: "Available Now" },
+  { id: "sold", label: "Recently Sold" },
 ];
 
 function DashboardPage() {
@@ -66,32 +67,34 @@ function DashboardPage() {
 
   return (
     <div className="flex flex-col gap-8 lg:gap-10">
-      <div className="rounded-2xl border border-earth-200/60 bg-gradient-to-br from-accent-50 via-cream-50 to-earth-50 p-6 shadow-sm sm:p-8">
-        <p className="text-xs font-semibold uppercase tracking-wider text-accent-800">
-          Field operations
+      <div className="relative overflow-hidden rounded-3xl bg-soil-dark-950 p-8 shadow-card text-white sm:p-10 isolate">
+        <div className="absolute -top-24 -right-24 h-64 w-64 rounded-full bg-agri-green-500 opacity-20 blur-3xl" />
+        <div className="absolute -bottom-24 -left-24 h-64 w-64 rounded-full bg-harvest-gold-500 opacity-20 blur-3xl" />
+        
+        <p className="flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-agri-green-400">
+          <Leaf className="h-4 w-4" /> Live Network
         </p>
-        <h2 className="mt-2 font-display text-2xl font-semibold tracking-tight text-earth-950 sm:text-3xl">
-          Distress sale marketplace
+        <h2 className="mt-4 font-display text-3xl font-bold tracking-tight sm:text-4xl text-white">
+          Direct Harvest Marketplace
         </h2>
-        <p className="mt-2 max-w-2xl text-sm leading-relaxed text-earth-700 sm:text-base">
-          Browse every listing in real time: available harvest, closed deals, and
-          urgency sorted automatically. Sign in to post or mark interest when you are
-          ready to buy.
+        <p className="mt-4 max-w-2xl text-base leading-relaxed text-soil-dark-300">
+          Browse fresh, time-sensitive produce listed directly by local farmers. 
+          Listings are automatically sorted by urgency so nothing goes to waste.
         </p>
       </div>
 
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-sm font-medium text-earth-800">Filter feed</p>
-        <div className="flex flex-wrap gap-2">
+        <p className="text-sm font-bold text-soil-dark-500 uppercase tracking-widest">Filter</p>
+        <div className="flex flex-wrap gap-2 bg-white p-1.5 rounded-2xl shadow-sm border border-soil-dark-100 w-full sm:w-auto overflow-x-auto no-scrollbar">
           {FILTERS.map((f) => (
             <button
               key={f.id}
               type="button"
               onClick={() => setFilter(f.id)}
-              className={`rounded-full border px-4 py-2 text-sm font-semibold transition hover:border-accent-400 ${
+              className={`rounded-xl px-5 py-2.5 text-sm font-bold transition-all duration-300 whitespace-nowrap ${
                 filter === f.id
-                  ? "border-earth-900 bg-earth-900 text-white"
-                  : "border-earth-200 bg-white text-earth-700"
+                  ? "bg-agri-green-600 text-white shadow-md shadow-agri-green-600/20"
+                  : "bg-transparent text-soil-dark-600 hover:bg-soil-dark-50 hover:text-soil-dark-950"
               }`}
             >
               {f.label}
@@ -101,34 +104,32 @@ function DashboardPage() {
       </div>
 
       {listError ? (
-        <div
-          className="rounded-xl border border-red-200 bg-red-50 px-4 py-4 text-sm text-red-800 shadow-sm"
-          role="alert"
-        >
-          {listError}
+        <div className="flex items-center gap-3 rounded-2xl border border-red-200 bg-red-50 p-5 text-sm font-medium text-red-800 shadow-sm">
+          <AlertCircle className="h-5 w-5 shrink-0" />
+          <p>{listError}</p>
         </div>
       ) : null}
 
       {actionError ? (
-        <div
-          className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800"
-          role="alert"
-        >
-          {actionError}
+        <div className="flex items-center gap-3 rounded-2xl border border-red-200 bg-red-50 p-5 text-sm font-medium text-red-800 shadow-sm">
+          <AlertCircle className="h-5 w-5 shrink-0" />
+          <p>{actionError}</p>
         </div>
       ) : null}
 
       {loading ? (
-        <div className="flex justify-center py-16">
-          <div className="h-10 w-10 animate-spin rounded-full border-2 border-earth-200 border-t-accent-600" />
+        <div className="flex flex-col items-center justify-center py-24 text-agri-green-600">
+          <Loader2 className="h-10 w-10 animate-spin mb-4" />
+          <p className="text-sm font-bold tracking-widest uppercase">Loading Harvests...</p>
         </div>
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
           {sorted.length === 0 ? (
-            <div className="col-span-full rounded-xl border border-dashed border-earth-200 bg-white/60 px-6 py-14 text-center">
-              <p className="text-sm font-medium text-earth-700">No items in this view.</p>
-              <p className="mt-1 text-xs text-earth-500">
-                Try another filter or check back when sellers post new harvest.
+            <div className="col-span-full flex flex-col items-center justify-center rounded-3xl border-2 border-dashed border-soil-dark-200 bg-white/50 px-6 py-24 text-center">
+              <Leaf className="h-12 w-12 text-soil-dark-300 mb-4" />
+              <p className="font-display text-lg font-bold text-soil-dark-900">No harvests found</p>
+              <p className="mt-2 text-sm text-soil-dark-500 max-w-sm">
+                Check back soon or adjust your filters. New produce is listed frequently during the morning hours.
               </p>
             </div>
           ) : (

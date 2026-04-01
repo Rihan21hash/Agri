@@ -1,0 +1,6 @@
+{
+  "artifactType":  "ARTIFACT_TYPE_IMPLEMENTATION_PLAN",
+  "summary":  "An implementation plan to revamp the entire UI to be fully modernized, responsive, and specifically tailored for farmers. This includes updating the Tailwind configuration, redesigning core pages, making navigation highly accessible for mobile, and modernizing visual components while keeping backend logic intact.",
+  "updatedAt":  "2026-04-01T04:06:02.893442600Z",
+  "requestFeedback":  true
+}
