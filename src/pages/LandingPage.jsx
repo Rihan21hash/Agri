@@ -92,10 +92,10 @@ function LandingPage() {
           <div className="mx-auto max-w-7xl px-6 lg:px-8 relative z-10">
             <div className="grid grid-cols-2 gap-8 lg:grid-cols-4">
               {[
-                { value: "10K+", label: "Active Farmers", icon: Users },
-                { value: "₹2.5Cr+", label: "Produce Traded", icon: IndianRupee },
-                { value: "98%", label: "Sell-Through Rate", icon: TrendingUp },
-                { value: "4hrs", label: "Avg. Sale Time", icon: Timer },
+                { value: "", label: "Active Farmers", icon: Users },
+                { value: "", label: "Produce Traded", icon: IndianRupee },
+                { value: "", label: "Sell-Through Rate", icon: TrendingUp },
+                { value: "", label: "Avg. Sale Time", icon: Timer },
               ].map((stat, idx) => (
                 <div
                   key={idx}
