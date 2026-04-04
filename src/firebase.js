@@ -43,7 +43,7 @@ function buildConfig() {
     apiKey: "AIzaSyAxucO3JNKghPmForTELzXDAzchEYEEoUc",
     authDomain: "agri-5c4af.firebaseapp.com",
     projectId: "agri-5c4af",
-    storageBucket: "agri-5c4af.appspot.com", // ✅ FIXED
+    storageBucket: "agri-5c4af.appspot.com", 
     messagingSenderId: "345686228122",
     appId: "1:345686228122:web:28c8a832fca7d0ffa53323",
     measurementId: "G-QV5WZTDEV8",

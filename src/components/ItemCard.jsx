@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import Timer from "./Timer";
-import { Clock, MapPin, DollarSign, Store } from "lucide-react";
+import { Clock, MapPin, IndianRupee, Store } from "lucide-react";
 
 const ONE_HOUR_MS = 60 * 60 * 1000;
 
@@ -79,7 +79,7 @@ function ItemCard({ item, onMarkSold, isAuthenticated, compact }) {
         <div className="mt-auto flex flex-col gap-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center text-agri-green-700 font-display text-2xl font-bold">
-               <DollarSign className="h-6 w-6 -mr-1" />
+               <IndianRupee className="h-6 w-6 -mr-1" />
                {typeof item.price === "number" ? item.price.toFixed(2) : item.price}
             </div>
             

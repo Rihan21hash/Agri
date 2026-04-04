@@ -6,7 +6,7 @@ import { db, storage } from "../firebase";
 import { addItem } from "../services/itemsService";
 import { uploadItemListingImage } from "../services/storageService";
 import { formatFirebaseError } from "../utils/firebaseErrors";
-import { PlusCircle, Image as ImageIcon, Info, DollarSign, Clock, AlertCircle } from "lucide-react";
+import { PlusCircle, Image as ImageIcon, Info, IndianRupee, Clock, AlertCircle } from "lucide-react";
 
 function PostItemPage() {
   const { currentUser } = useAuth();
@@ -263,14 +263,14 @@ function PostItemPage() {
         <section className="rounded-3xl border border-soil-dark-100 bg-white p-6 sm:p-8 shadow-sm">
           <div className="flex items-center gap-3 mb-6 pb-4 border-b border-soil-dark-100">
              <div className="h-10 w-10 flex items-center justify-center rounded-xl bg-harvest-gold-100 text-harvest-gold-700">
-                <DollarSign className="h-5 w-5" />
+                <IndianRupee className="h-5 w-5" />
              </div>
              <h3 className="text-xl font-bold text-soil-dark-950 font-display">Price & Deadline</h3>
           </div>
           <div className="grid gap-6 md:grid-cols-2">
             <FormInput
               id="post-price"
-              label="Price (Total or per unit? Clarify in notes)"
+              label="Price in ₹ (Total or per unit? Clarify in notes)"
               type="number"
               value={price}
               onChange={(e) => setPrice(e.target.value)}

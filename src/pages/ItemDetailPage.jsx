@@ -5,7 +5,7 @@ import { useAuth } from "../context/AuthContext";
 import { db } from "../firebase";
 import { markAsSold, subscribeItem } from "../services/itemsService";
 import { formatFirebaseError } from "../utils/firebaseErrors";
-import { Clock, DollarSign, MapPin, Loader2, AlertCircle, Phone, Info } from "lucide-react";
+import { Clock, IndianRupee, MapPin, Loader2, AlertCircle, Phone, Info } from "lucide-react";
 
 const ONE_HOUR_MS = 60 * 60 * 1000;
 
@@ -173,7 +173,7 @@ function ItemDetailPage() {
                  <div className="rounded-2xl bg-white p-5 border border-soil-dark-100 shadow-sm flex flex-col justify-center">
                     <dt className="text-xs font-bold uppercase tracking-widest text-soil-dark-500 mb-1">Asking Price</dt>
                     <dd className="font-display text-3xl font-bold text-agri-green-700 flex items-center">
-                       <DollarSign className="h-6 w-6 -mr-1" />
+                       <IndianRupee className="h-6 w-6 -mr-1" />
                        {typeof item.price === "number" ? item.price.toFixed(2) : item.price}
                     </dd>
                  </div>
