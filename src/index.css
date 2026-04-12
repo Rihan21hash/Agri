@@ -13,23 +13,120 @@
     background-color: theme('colors.agri-green.500');
     color: white;
   }
+
+  /* Larger font-size for mobile field readability */
+  html {
+    font-size: 16px;
+  }
+  @media (min-width: 768px) {
+    html {
+      font-size: 16px;
+    }
+  }
+
+  /* Minimum tap target size */
+  button, a, input, select, textarea {
+    min-height: 36px;
+  }
 }
 
-/* Custom Scrollbar */
+@layer utilities {
+  /* Hide scrollbar but keep scrolling */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* Shimmer skeleton animation */
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  .animate-shimmer {
+    background: linear-gradient(90deg, theme('colors.soil-dark.100') 25%, theme('colors.soil-dark.50') 50%, theme('colors.soil-dark.100') 75%);
+    background-size: 200% 100%;
+    animation: shimmer 2s ease-in-out infinite;
+  }
+}
+
+/* ── Custom Scrollbar ──────────────────────────── */
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
 }
-
 ::-webkit-scrollbar-track {
   background: theme('colors.cream.50');
 }
-
 ::-webkit-scrollbar-thumb {
   background: theme('colors.soil-dark.200');
   border-radius: 5px;
 }
-
 ::-webkit-scrollbar-thumb:hover {
   background: theme('colors.soil-dark.400');
+}
+
+/* ── HIGH CONTRAST MODE ────────────────────────── */
+html.high-contrast {
+  --hc-bg: #000000;
+  --hc-text: #ffffff;
+  --hc-accent: #ffdd00;
+  --hc-border: #ffffff;
+}
+
+html.high-contrast body {
+  background: var(--hc-bg) !important;
+  color: var(--hc-text) !important;
+}
+
+html.high-contrast .bg-cream-50,
+html.high-contrast .bg-white,
+html.high-contrast .bg-soil-dark-50 {
+  background: #111 !important;
+}
+
+html.high-contrast .text-soil-dark-500,
+html.high-contrast .text-soil-dark-400,
+html.high-contrast .text-soil-dark-600,
+html.high-contrast .text-soil-dark-700,
+html.high-contrast .text-soil-dark-800 {
+  color: #e0e0e0 !important;
+}
+
+html.high-contrast .text-soil-dark-950,
+html.high-contrast .text-soil-dark-900 {
+  color: #ffffff !important;
+}
+
+html.high-contrast .border-soil-dark-100,
+html.high-contrast .border-soil-dark-200 {
+  border-color: #444 !important;
+}
+
+html.high-contrast .bg-agri-green-600,
+html.high-contrast .bg-agri-green-700 {
+  background: #22c55e !important;
+}
+
+html.high-contrast .bg-harvest-gold-500 {
+  background: #eab308 !important;
+}
+
+html.high-contrast .shadow-card,
+html.high-contrast .shadow-floating {
+  box-shadow: 0 0 0 2px var(--hc-accent) !important;
+}
+
+/* Larger touch targets in high contrast */
+html.high-contrast button,
+html.high-contrast a {
+  min-height: 48px;
+  border: 2px solid transparent;
+}
+html.high-contrast button:focus,
+html.high-contrast a:focus {
+  outline: 3px solid var(--hc-accent);
+  outline-offset: 2px;
 }

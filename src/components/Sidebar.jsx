@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { Store, PlusCircle, User, LogIn, Sprout } from "lucide-react";
+import { Store, PlusCircle, User, LogIn, Sprout, TrendingUp, FileText } from "lucide-react";
 
 const publicLinks = [
   {
@@ -8,6 +8,18 @@ const publicLinks = [
     label: "Marketplace",
     description: "Live harvest listings",
     Icon: Store,
+  },
+  {
+    to: "/market-prices",
+    label: "Mandi Prices",
+    description: "Today's market rates",
+    Icon: TrendingUp,
+  },
+  {
+    to: "/government-schemes",
+    label: "Govt Schemes",
+    description: "Subsidies & benefits",
+    Icon: FileText,
   },
 ];
 

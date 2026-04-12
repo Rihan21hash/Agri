@@ -5,7 +5,7 @@ import { db } from "../firebase";
 import { getItems, markAsSold } from "../services/itemsService";
 import { formatFirebaseError } from "../utils/firebaseErrors";
 import { sortItemsByUrgency } from "../utils/sortItems";
-import { PackageSearch, AlertCircle, Loader2, Link as LinkIcon, Handshake } from "lucide-react";
+import { PackageSearch, AlertCircle, Loader2, Handshake } from "lucide-react";
 import { Link } from "react-router-dom";
 
 function MyItemsPage() {
