@@ -462,7 +462,7 @@ Contributions are welcome. Please follow the steps below:
 4. Push to your branch: `git push origin feature/your-feature-name`
 5. Open a pull request against the `main` branch
 
-Please follow the existing code style and include tests for any new functionality. For major changes, open an issue first to discuss the proposal.
+Please follow the existing code style and include tests for any new functionality.
 
 ---
 
