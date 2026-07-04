@@ -465,11 +465,3 @@ Contributions are welcome. Please follow the steps below:
 Please follow the existing code style and include tests for any new functionality.
 
 ---
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for details.
-
----
-
-Built for the hackathon with a focus on speed, locality, and farmer accessibility.
