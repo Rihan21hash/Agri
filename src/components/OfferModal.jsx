@@ -47,19 +47,19 @@ export default function OfferModal({ isOpen, onClose, item }) {
   return (
     <AnimatePresence>
       {isOpen && (
-        <>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6">
           <motion.div
-            className="fixed inset-0 z-50 bg-soil-dark-950/50 backdrop-blur-sm"
+            className="fixed inset-0 bg-soil-dark-950/60 backdrop-blur-sm"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
           />
           <motion.div
-            className="fixed inset-x-4 bottom-4 z-50 mx-auto max-w-lg rounded-3xl bg-white p-6 shadow-2xl sm:inset-auto sm:left-1/2 sm:top-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 sm:p-8"
-            initial={{ opacity: 0, y: 100, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 100, scale: 0.9 }}
+            className="relative z-10 flex w-full max-w-lg max-h-[88vh] flex-col overflow-y-auto rounded-3xl bg-white p-6 sm:p-8 shadow-2xl"
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ type: "spring", damping: 25 }}
           >
             <button
@@ -168,7 +168,7 @@ export default function OfferModal({ isOpen, onClose, item }) {
               </div>
             </div>
           </motion.div>
-        </>
+        </div>
       )}
     </AnimatePresence>
   );

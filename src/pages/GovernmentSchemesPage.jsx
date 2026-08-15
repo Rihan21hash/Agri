@@ -127,23 +127,26 @@ export default function GovernmentSchemesPage() {
       {/* Detail Modal */}
       <AnimatePresence>
         {detail && (
-          <>
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6">
+            {/* Backdrop */}
             <motion.div
-              className="fixed inset-0 z-50 bg-soil-dark-950/50 backdrop-blur-sm"
+              className="fixed inset-0 bg-soil-dark-950/60 backdrop-blur-sm"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setDetail(null)}
             />
+
+            {/* Modal Card */}
             <motion.div
-              className="fixed inset-4 z-50 mx-auto max-w-2xl overflow-y-auto rounded-3xl bg-white shadow-2xl sm:inset-auto sm:left-1/2 sm:top-1/2 sm:w-full sm:max-h-[80vh] sm:-translate-x-1/2 sm:-translate-y-1/2 sm:max-w-2xl"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
+              className="relative z-10 flex w-full max-w-2xl max-h-[88vh] flex-col overflow-hidden rounded-3xl bg-white shadow-2xl"
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
               transition={{ type: "spring", damping: 25 }}
             >
               {/* Modal header */}
-              <div className="sticky top-0 z-10 flex items-center justify-between border-b border-soil-dark-100 bg-white/95 backdrop-blur-md p-6">
+              <div className="flex shrink-0 items-center justify-between border-b border-soil-dark-100 bg-white p-5 sm:p-6">
                 <div className="flex items-center gap-3">
                   <span className="text-3xl">{detail.icon}</span>
                   <div>
@@ -163,7 +166,8 @@ export default function GovernmentSchemesPage() {
                 </button>
               </div>
 
-              <div className="space-y-6 p-6">
+              {/* Scrollable Body */}
+              <div className="flex-1 overflow-y-auto p-5 sm:p-6 space-y-6">
                 {/* Benefit */}
                 <div className="rounded-2xl bg-agri-green-50 border border-agri-green-200 p-5">
                   <p className="text-sm font-bold uppercase text-agri-green-600 mb-2">💰 Benefit</p>
@@ -215,33 +219,35 @@ export default function GovernmentSchemesPage() {
                     </div>
                   </div>
                 )}
+              </div>
 
-                {/* Helpline & Apply */}
-                <div className="flex flex-col gap-3 border-t border-soil-dark-100 pt-6">
-                  <a
-                    href={detail.applyUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2 rounded-2xl bg-agri-green-600 px-6 py-4 text-base font-bold text-white transition-all hover:bg-agri-green-700 hover:-translate-y-0.5 shadow-floating"
-                  >
-                    <ExternalLink className="h-5 w-5" /> Apply Online
-                  </a>
+              {/* Sticky Footer */}
+              <div className="shrink-0 flex flex-col gap-3 border-t border-soil-dark-100 bg-white p-5 sm:p-6">
+                <a
+                  href={detail.applyUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2 rounded-2xl bg-agri-green-600 px-6 py-3.5 text-base font-bold text-white transition-all hover:bg-agri-green-700 shadow-floating"
+                >
+                  <ExternalLink className="h-5 w-5" /> Apply Online
+                </a>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {detail.helpline && (
-                    <div className="flex items-center justify-center gap-2 rounded-2xl border border-soil-dark-200 bg-white px-6 py-3 text-sm font-bold text-soil-dark-700">
+                    <div className="flex items-center justify-center gap-2 rounded-2xl border border-soil-dark-200 bg-white px-4 py-2.5 text-xs font-bold text-soil-dark-700">
                       <Phone className="h-4 w-4 text-agri-green-600" />
                       Helpline: {detail.helpline}
                     </div>
                   )}
                   <button
                     onClick={() => { openChatbot(detail); setDetail(null); }}
-                    className="flex items-center justify-center gap-2 rounded-2xl border border-harvest-gold-300 bg-harvest-gold-50 px-6 py-3 text-sm font-bold text-harvest-gold-800 transition-colors hover:bg-harvest-gold-100"
+                    className="flex items-center justify-center gap-2 rounded-2xl border border-harvest-gold-300 bg-harvest-gold-50 px-4 py-2.5 text-xs font-bold text-harvest-gold-800 transition-colors hover:bg-harvest-gold-100"
                   >
-                    🌾 Ask Kisan Mitra about this scheme
+                    🌾 Ask Kisan Mitra
                   </button>
                 </div>
               </div>
             </motion.div>
-          </>
+          </div>
         )}
       </AnimatePresence>
     </div>

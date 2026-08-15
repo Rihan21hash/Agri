@@ -98,6 +98,7 @@ function PostItemPage() {
       await addItem(db, {
         title: data.cropName.trim(),
         price: Number(data.price),
+        quantity: data.quantity.trim(),
         description,
         imageUrl: finalImageUrl,
         sellerId: currentUser.uid,

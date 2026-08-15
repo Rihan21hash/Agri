@@ -143,18 +143,26 @@ function ItemDetailPage() {
                 </p>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 <div className="rounded-2xl bg-white p-5 border border-soil-dark-100 shadow-sm">
                   <dt className="text-xs font-bold uppercase tracking-widest text-soil-dark-500 mb-1">Asking Price</dt>
-                  <dd className="font-display text-3xl font-bold text-agri-green-700 flex items-center">
+                  <dd className="font-display text-2xl sm:text-3xl font-bold text-agri-green-700 flex items-center">
                     <IndianRupee className="h-6 w-6 -mr-1" />
                     {typeof item.price === "number" ? item.price.toFixed(2) : item.price}
                   </dd>
                 </div>
+                {item.quantity && (
+                  <div className="rounded-2xl bg-white p-5 border border-soil-dark-100 shadow-sm">
+                    <dt className="text-xs font-bold uppercase tracking-widest text-soil-dark-500 mb-1">Available Qty</dt>
+                    <dd className="font-display text-lg font-bold text-soil-dark-900 leading-snug">
+                      {item.quantity}
+                    </dd>
+                  </div>
+                )}
                 <div className="rounded-2xl bg-white p-5 border border-soil-dark-100 shadow-sm">
                   <dt className="text-xs font-bold uppercase tracking-widest text-soil-dark-500 mb-1">Status</dt>
                   {expiresAt && !isSold && !isExpired ? (
-                    <dd className={`font-mono text-xl font-bold flex items-center gap-2 ${urgent ? "text-harvest-gold-600 animate-pulse" : "text-soil-dark-900"}`}>
+                    <dd className={`font-mono text-lg font-bold flex items-center gap-2 ${urgent ? "text-harvest-gold-600 animate-pulse" : "text-soil-dark-900"}`}>
                       <Clock className="h-5 w-5" />
                       <Timer expiresAt={expiresAt} />
                     </dd>

@@ -81,6 +81,26 @@ async function callOllama(messages) {
   }
 }
 
+function renderFormattedMessage(text) {
+  if (!text) return null;
+  const lines = text.split("\n");
+  return lines.map((line, idx) => {
+    const parts = line.split(/(\*\*.*?\*\*)/g);
+    const formattedLine = parts.map((part, pIdx) => {
+      if (part.startsWith("**") && part.endsWith("**")) {
+        return <strong key={pIdx} className="font-bold">{part.slice(2, -2)}</strong>;
+      }
+      return part;
+    });
+
+    return (
+      <span key={idx} className="block min-h-[1.25rem]">
+        {formattedLine}
+      </span>
+    );
+  });
+}
+
 export default function FloatingChatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([WELCOME_MSG]);
@@ -141,50 +161,51 @@ export default function FloatingChatbot() {
 
   return (
     <>
-      {/* Floating Button */}
-      <motion.button
-        className={cn(
-          "fixed bottom-24 right-4 z-50 flex h-14 w-14 items-center justify-center rounded-full text-2xl shadow-2xl transition-colors md:bottom-8 md:h-16 md:w-16",
-          isOpen ? "bg-soil-dark-800 text-white" : "bg-agri-green-600 text-white"
-        )}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={() => setIsOpen(!isOpen)}
-        animate={!isOpen ? {
-          boxShadow: [
-            "0 0 0 0 rgba(34,197,94,0.5)",
-            "0 0 0 16px rgba(34,197,94,0)",
-            "0 0 0 0 rgba(34,197,94,0)",
-          ],
-        } : {}}
-        transition={!isOpen ? { repeat: Infinity, duration: 2.5 } : {}}
-        aria-label={isOpen ? "Close chat" : "Open Kisan Mitra chat"}
-        style={{ zIndex: 60 }}
-      >
-        {isOpen ? <X className="h-6 w-6" /> : "🌾"}
-      </motion.button>
+      {/* Floating Button (Hidden when Chat Panel is Open) */}
+      {!isOpen && (
+        <motion.button
+          className="fixed bottom-24 right-4 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-agri-green-600 text-2xl text-white shadow-2xl transition-all md:bottom-8 md:h-16 md:w-16 hover:bg-agri-green-700"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => setIsOpen(true)}
+          animate={{
+            boxShadow: [
+              "0 0 0 0 rgba(34,197,94,0.5)",
+              "0 0 0 16px rgba(34,197,94,0)",
+              "0 0 0 0 rgba(34,197,94,0)",
+            ],
+          }}
+          transition={{ repeat: Infinity, duration: 2.5 }}
+          aria-label="Open Kisan Mitra chat"
+        >
+          🌾
+        </motion.button>
+      )}
 
       {/* Chat Panel */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 100, scale: 0.85 }}
+            initial={{ opacity: 0, y: 50, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 100, scale: 0.85 }}
+            exit={{ opacity: 0, y: 50, scale: 0.9 }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="fixed bottom-40 right-4 z-50 flex w-[380px] flex-col overflow-hidden rounded-2xl border border-agri-green-200 bg-white shadow-2xl md:bottom-28 max-sm:inset-0 max-sm:bottom-0 max-sm:right-0 max-sm:w-full max-sm:rounded-none"
-            style={{ height: "min(560px, calc(100vh - 180px))", zIndex: 55 }}
+            className="fixed bottom-4 right-4 z-50 flex w-[380px] max-w-[calc(100vw-2rem)] flex-col overflow-hidden rounded-3xl border border-agri-green-200 bg-white shadow-2xl sm:bottom-6 sm:right-6 max-sm:inset-2 max-sm:z-50"
+            style={{ height: "min(560px, calc(100vh - 80px))" }}
           >
             {/* Header */}
-            <div className="flex items-center gap-3 bg-gradient-to-r from-agri-green-600 to-agri-green-700 px-4 py-3 text-white">
+            <div className="flex items-center gap-3 bg-gradient-to-r from-agri-green-600 to-agri-green-700 px-5 py-3.5 text-white">
               <span className="text-2xl">🌾</span>
               <div className="flex-1">
                 <h3 className="font-display text-lg font-bold">Kisan Mitra</h3>
-                <p className="text-xs text-agri-green-100">🟢 Online — Ask me anything!</p>
+                <p className="text-xs text-agri-green-100 flex items-center gap-1.5">
+                  <span className="h-2 w-2 rounded-full bg-agri-green-300 animate-pulse" /> Online — Ask me anything!
+                </p>
               </div>
               <button
                 onClick={() => setIsOpen(false)}
-                className="rounded-lg p-1.5 text-white/80 hover:bg-white/20 hover:text-white transition-colors sm:hidden"
+                className="rounded-xl p-2 text-white/80 hover:bg-white/20 hover:text-white transition-colors"
+                aria-label="Close chat"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -201,13 +222,13 @@ export default function FloatingChatbot() {
                 >
                   <div
                     className={cn(
-                      "max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap",
+                      "max-w-[88%] rounded-2xl px-4 py-3 text-sm leading-relaxed",
                       msg.role === "user"
-                        ? "bg-agri-green-600 text-white rounded-br-sm"
+                        ? "bg-agri-green-600 text-white rounded-br-sm font-medium"
                         : "bg-white text-soil-dark-800 shadow-sm border border-soil-dark-100 rounded-bl-sm"
                     )}
                   >
-                    {msg.content}
+                    {renderFormattedMessage(msg.content)}
                   </div>
                 </motion.div>
               ))}

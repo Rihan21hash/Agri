@@ -73,6 +73,8 @@ export async function addItem(db, payload) {
   const {
     title,
     price,
+    quantity,
+    category,
     description,
     imageUrl,
     sellerId,
@@ -86,6 +88,8 @@ export async function addItem(db, payload) {
   return addDoc(collection(db, ITEMS_COLLECTION), {
     title: String(title).trim(),
     price: Number(price),
+    quantity: quantity ? String(quantity).trim() : "",
+    category: category ? String(category).trim() : "crops",
     description: String(description).trim(),
     imageUrl: String(imageUrl ?? "").trim(),
     sellerId,
@@ -103,3 +107,101 @@ export async function markAsSold(db, itemId) {
     status: "sold",
   });
 }
+
+export const STOCK_ITEMS = [
+  {
+    title: "Fresh Red Apples",
+    quantity: "1 Wooden Crate (15 kg)",
+    category: "fruits",
+    price: 1200,
+    description: "Quantity: 1 Wooden Crate (15 kg). Freshly picked crisp red apples packaged in a wooden crate ready for immediate pickup.",
+    imageUrl: "/images/stock-images/apple-crate.jpg",
+    sellerId: "stock_seller_01",
+    status: "available",
+  },
+  {
+    title: "Farm Fresh Carrots",
+    quantity: "1 Crate (12 kg)",
+    category: "vegetables",
+    price: 480,
+    description: "Quantity: 1 Crate (12 kg). Organically grown fresh carrots with green leafy tops in a farm crate.",
+    imageUrl: "/images/stock-images/carrot-crate.jpg",
+    sellerId: "stock_seller_02",
+    status: "available",
+  },
+  {
+    title: "Farm Fresh Country Eggs",
+    quantity: "1 Tray (30 Eggs)",
+    category: "household",
+    price: 180,
+    description: "Quantity: 1 Tray (30 Eggs). Organic poultry farm brown eggs neatly arranged in a 30-egg tray.",
+    imageUrl: "/images/stock-images/eggs.jpg",
+    sellerId: "stock_seller_03",
+    status: "available",
+  },
+  {
+    title: "Juicy Nagpur Oranges",
+    quantity: "1 Crate (18 kg)",
+    category: "fruits",
+    price: 950,
+    description: "Quantity: 1 Crate (18 kg). Sweet and juicy orange harvest packed overflowing in a wooden crate.",
+    imageUrl: "/images/stock-images/oranges-crate.jpg",
+    sellerId: "stock_seller_04",
+    status: "available",
+  },
+  {
+    title: "Quality Russet Potatoes",
+    quantity: "1 Crate (25 kg)",
+    category: "vegetables",
+    price: 650,
+    description: "Quantity: 1 Crate (25 kg). Clean, high-grade farm potatoes packed in a rustic wooden crate.",
+    imageUrl: "/images/stock-images/potato-crate.jpg",
+    sellerId: "stock_seller_05",
+    status: "available",
+  },
+  {
+    title: "Premium Basmati Rice",
+    quantity: "1 Jute Sack (50 kg)",
+    category: "crops",
+    price: 3200,
+    description: "Quantity: 1 Jute Sack (50 kg). Long-grain aromatic basmati rice in a heavy-duty gunny sack.",
+    imageUrl: "/images/stock-images/rice-bag.jpg",
+    sellerId: "stock_seller_06",
+    status: "available",
+  },
+  {
+    title: "Fresh Farm Tomatoes",
+    quantity: "1 Plastic Crate (20 kg)",
+    category: "vegetables",
+    price: 600,
+    description: "Quantity: 1 Plastic Crate (20 kg). Bright red vine-ripened tomatoes in a standard black plastic harvest crate.",
+    imageUrl: "/images/stock-images/tomato-crate.jpg",
+    sellerId: "stock_seller_07",
+    status: "available",
+  },
+  {
+    title: "Golden Harvest Wheat",
+    quantity: "1 Jute Sack (50 kg)",
+    category: "crops",
+    price: 1450,
+    description: "Quantity: 1 Jute Sack (50 kg). Clean, sun-dried golden wheat grain in a traditional jute sack.",
+    imageUrl: "/images/stock-images/wheat-bag.jpg",
+    sellerId: "stock_seller_08",
+    status: "available",
+  },
+];
+
+export async function seedStockItems(db, currentUserId) {
+  const now = Date.now();
+  const durations = [48, 24, 72, 36, 60, 120, 18, 96];
+  for (let i = 0; i < STOCK_ITEMS.length; i++) {
+    const item = STOCK_ITEMS[i];
+    await addDoc(collection(db, ITEMS_COLLECTION), {
+      ...item,
+      sellerId: currentUserId || item.sellerId,
+      expiresAt: now + durations[i] * 60 * 60 * 1000,
+      createdAt: serverTimestamp(),
+    });
+  }
+}
+

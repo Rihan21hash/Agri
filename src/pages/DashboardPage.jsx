@@ -7,10 +7,10 @@ import OfferModal from "../components/OfferModal";
 import BuyerSellerChat from "../components/BuyerSellerChat";
 import { useAuth } from "../context/AuthContext";
 import { db } from "../firebase";
-import { getItems, markAsSold } from "../services/itemsService";
+import { getItems, markAsSold, seedStockItems } from "../services/itemsService";
 import { formatFirebaseError } from "../utils/firebaseErrors";
 import { sortItemsByUrgency } from "../utils/sortItems";
-import { Leaf, AlertCircle } from "lucide-react";
+import { Leaf, AlertCircle, Sparkles, Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
 
 const FILTERS = [
@@ -24,9 +24,9 @@ function DashboardPage() {
   const [items, setItems] = useState([]);
   const [listError, setListError] = useState(null);
   const [filter, setFilter] = useState("available");
-  // eslint-disable-next-line no-unused-vars
   const [category, setCategory] = useState("all");
   const [loading, setLoading] = useState(true);
+  const [seeding, setSeeding] = useState(false);
   const [offerItem, setOfferItem] = useState(null);
   const [chatItem, setChatItem] = useState(null);
 
@@ -34,17 +34,32 @@ function DashboardPage() {
     const unsub = getItems(
       db,
       (rows) => { setListError(null); setItems(rows); setLoading(false); },
-      (err) => { setListError(err?.message || "Failed to load items."); setLoading(false); }
+      (err) => { setListError(formatFirebaseError(err)); setLoading(false); }
     );
     return unsub;
   }, []);
+
+  const handleSeed = async () => {
+    setSeeding(true);
+    try {
+      await seedStockItems(db, currentUser?.uid);
+      toast.success("🌱 Added 8 stock harvests to Firebase Firestore!");
+    } catch (err) {
+      toast.error(formatFirebaseError(err));
+    } finally {
+      setSeeding(false);
+    }
+  };
 
   const filtered = useMemo(() => {
     let list = items;
     if (filter === "available") list = list.filter((i) => i.status === "available");
     if (filter === "sold") list = list.filter((i) => i.status === "sold");
+    if (category !== "all") {
+      list = list.filter((i) => (i.category || "crops").toLowerCase() === category.toLowerCase());
+    }
     return list;
-  }, [items, filter]);
+  }, [items, filter, category]);
 
   const sorted = useMemo(() => sortItemsByUrgency(filtered), [filtered]);
 
@@ -81,6 +96,18 @@ function DashboardPage() {
         <p className="mt-4 max-w-2xl text-base leading-relaxed text-soil-dark-300">
           Browse fresh, time-sensitive produce listed directly by local farmers.
         </p>
+        <button
+          type="button"
+          onClick={handleSeed}
+          disabled={seeding}
+          className="mt-6 inline-flex items-center gap-2 rounded-2xl bg-agri-green-500/20 backdrop-blur-md border border-agri-green-400/30 px-5 py-2.5 text-sm font-bold text-agri-green-300 transition-all hover:bg-agri-green-500/30 hover:text-white disabled:opacity-50"
+        >
+          {seeding ? (
+            <><Loader2 className="h-4 w-4 animate-spin" /> Adding to Firebase...</>
+          ) : (
+            <><Sparkles className="h-4 w-4 text-harvest-gold-400" /> Add Stock Harvests to Firebase</>
+          )}
+        </button>
       </motion.div>
 
       {/* Category chips */}
@@ -129,12 +156,24 @@ function DashboardPage() {
           variants={{ visible: { transition: { staggerChildren: 0.05 } } }}
         >
           {sorted.length === 0 ? (
-            <div className="col-span-full flex flex-col items-center justify-center rounded-3xl border-2 border-dashed border-soil-dark-200 bg-white/50 px-6 py-24 text-center">
+            <div className="col-span-full flex flex-col items-center justify-center rounded-3xl border-2 border-dashed border-soil-dark-200 bg-white/50 px-6 py-20 text-center">
               <Leaf className="h-12 w-12 text-soil-dark-300 mb-4" />
               <p className="font-display text-lg font-bold text-soil-dark-900">No harvests found</p>
-              <p className="mt-2 text-sm text-soil-dark-500 max-w-sm">
-                Check back soon or adjust your filters.
+              <p className="mt-2 text-sm text-soil-dark-500 max-w-sm mb-6">
+                No items match your filter. You can add the 8 stock harvest produce items directly to Firebase.
               </p>
+              <button
+                type="button"
+                onClick={handleSeed}
+                disabled={seeding}
+                className="inline-flex items-center gap-2 rounded-2xl bg-agri-green-600 px-6 py-3 text-sm font-bold text-white shadow-floating transition-all hover:-translate-y-0.5 hover:bg-agri-green-700 disabled:opacity-50"
+              >
+                {seeding ? (
+                  <><Loader2 className="h-4 w-4 animate-spin" /> Adding to Firebase...</>
+                ) : (
+                  <><Sparkles className="h-4 w-4 text-harvest-gold-300" /> Populate 8 Stock Harvests into Firebase</>
+                )}
+              </button>
             </div>
           ) : (
             sorted.map((item) => (

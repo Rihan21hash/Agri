@@ -59,13 +59,23 @@ function ItemCard({ item, onMarkSold, isAuthenticated, compact, onChat, onOffer 
           <h3 className="font-display text-2xl font-bold leading-tight drop-shadow-md line-clamp-1">
             {item.title}
           </h3>
-          <p className="flex items-center gap-1 text-sm font-medium opacity-90 mt-1">
-            <MapPin className="h-4 w-4" /> Local Harvest
-          </p>
+          <div className="flex items-center justify-between gap-2 text-sm font-medium opacity-90 mt-1">
+            <span className="flex items-center gap-1"><MapPin className="h-4 w-4" /> Local Harvest</span>
+            {item.quantity && (
+              <span className="bg-white/20 backdrop-blur-md px-2.5 py-0.5 rounded-full text-xs font-bold">
+                {item.quantity}
+              </span>
+            )}
+          </div>
         </div>
       </Link>
 
       <div className="flex flex-1 flex-col p-5">
+        {item.quantity && (
+          <div className="mb-2.5 inline-self-start inline-flex items-center gap-1.5 rounded-lg bg-agri-green-50 px-2.5 py-1 text-xs font-bold text-agri-green-800 border border-agri-green-200/60 w-fit">
+            <span className="text-agri-green-600">Qty:</span> {item.quantity}
+          </div>
+        )}
         <p
           className={cn(
             "text-sm leading-relaxed text-soil-dark-600 mb-4",
